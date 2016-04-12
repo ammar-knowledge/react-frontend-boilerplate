@@ -85,6 +85,7 @@ import Err404 from 'page/common/Err404.jsx';
 
 /* Sub pages */
 import ChangePassword from 'page/common/ChangePassword.jsx';
+import TestForms from 'page/demo/TestForms.jsx';
 
 const routes = [
   { path: '/signin', component: Signin },
@@ -95,6 +96,7 @@ const routes = [
     indexRoute: { component: Blank },
     childRoutes: [
       /* Common */
+      {path: '/demo/test_forms', component: TestForms},
       {path: '/user/change_password', component: ChangePassword},
       /* Others */
       {path: '*', component: Err404},

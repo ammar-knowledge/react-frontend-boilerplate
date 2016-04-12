@@ -11,7 +11,7 @@
     "react-cookie": "^0.4.2",
     "react-highcharts": "^5.0.4",
     "babel-polyfill": "^6.3.14",
-    "antd": "^0.12.1",
+    "antd": "1.0.0-beta.2",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "rx-react": "^0.3.0",

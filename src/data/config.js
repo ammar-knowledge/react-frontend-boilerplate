@@ -1,7 +1,7 @@
 
 export const tokenKey = 'X-Token';
-export const siteTitle = '...';
-export const docTitle = '... - [呼呼科技]';
+export const siteTitle = '某某管理后台';
+export const docTitle = '某某管理后台 - [呼呼科技]';
 
 
 export const provinces = [
@@ -63,8 +63,9 @@ export const sideMenus = {
     subMenus: [
       {
         key: "sub1",
-        title: {iconClass: "fa fa-fw fa-user", label: "账户管理"},
+        title: {iconClass: "fa fa-fw fa-folder", label: "一级目录"},
         menus: [
+          {key: "/demo/test_forms", label: "表单示例"},
           {key: "/user/change_password", label: "修改密码"},
         ]
       },
