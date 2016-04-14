@@ -3,7 +3,8 @@ React([ant-design](https://github.com/ant-design/ant-design)) based frontend boi
 
 ## How to run it
 ``` bash
-    npm install
-    # More commands see: package.json
-    npm start
+npm install
+# More commands see: package.json
+npm start
+# Open http://localhost:3000/#/demo/test_forms
 ```
