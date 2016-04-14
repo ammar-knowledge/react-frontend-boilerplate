@@ -56,8 +56,8 @@ const App = React.createClass({
 
     if (cookie.load(tokenKey) === undefined) {
       console.log('X-Token is missing!');
-      message.error('请先登录系统!');
-      this.history.pushState(null, '/signin');
+      /* message.error('请先登录系统!');
+         this.history.pushState(null, '/signin'); */
     }
 
     console.log('current user:', this.state.user);

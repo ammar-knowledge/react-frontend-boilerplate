@@ -523,7 +523,7 @@ class DemoImageForm extends Component {
       }
     });
     Object.assign(imageProps, {
-      action: '/upload',
+      action: 'http://demo-static.huhulab.com:9956/upload',
       accept: "image/*",
       listType: "picture",
       multiple: true,
@@ -555,7 +555,7 @@ class DemoImageForm extends Component {
       }
     });
     Object.assign(imageProps2, {
-      action: '/upload',
+      action: 'http://demo-static.huhulab.com:9956/upload',
       accept: "image/*",
       listType: "picture",
       multiple: true,
