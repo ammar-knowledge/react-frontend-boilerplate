@@ -2,7 +2,7 @@
 import React from 'react';
 import {
   /* 通用 */
-  Col, Row, message, Button,
+  Col, Row, message, Button, Icon, Tabs,
   /* 表单 */
   Form,        // 表单
   Input,       // 普通输入框: <input type="{T}" />
@@ -22,8 +22,16 @@ import {
   QueueAnim,
 } from 'antd';
 
-import { getStatusClasses, getStatusHelp } from 'common/utils';
-import * as _ from 'lodash';
+// import { getStatusClasses, getStatusHelp } from 'common/utils';
+// import * as _ from 'lodash';
+
+
+/* antd.Common */
+export const ButtonClass = React.createFactory(Button);
+export const IconClass = React.createFactory(Icon);
+export const TabsClass = React.createFactory(Tabs);
+export const TabPaneClass = React.createFactory(Tabs.TabPane);
+
 
 /* antd.Form */
 export const FormClass = React.createFactory(Form);
@@ -46,10 +54,13 @@ export const TransferClass = React.createFactory(Transfer);
 export const SelectClass = React.createFactory(Select);
 export const OptionClass = React.createFactory(Select.Option);
 
+export const TreeSelectClass = React.createFactory(TreeSelect)
+export const SliderClass = React.createFactory(Slider);
+export const SwitchClass = React.createFactory(Switch);
 export const DatePickerClass = React.createFactory(DatePicker);
-
-/* antd.Common */
-export const ButtonClass = React.createFactory(Button);
+export const RangePickerClass = React.createFactory(DatePicker.RangePicker);
+export const TimePickerClass = React.createFactory(TimePicker);
+export const UploadClass = React.createFactory(Upload);
 
 
 export const div = React.createFactory('div');

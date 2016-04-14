@@ -87,7 +87,7 @@ import Err404 from 'page/common/Err404.jsx';
 import ChangePassword from 'page/common/ChangePassword.jsx';
 import TestForms from 'page/demo/TestForms.jsx';
 
-const routes = [
+export const routes = [
   { path: '/signin', component: Signin },
   { path: '/signup', component: Signup },
   {
@@ -103,5 +103,3 @@ const routes = [
     ]
   },
 ]
-
-export default {App, routes};

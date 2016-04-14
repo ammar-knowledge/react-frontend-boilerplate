@@ -8,7 +8,7 @@ import {Router} from 'react-router';
 import cookie from 'react-cookie';
 import {tokenKey, docTitle} from 'data/config';
 
-import {routes} from 'component/App.jsx';
+import { routes } from 'component/App.jsx';
 
 
 /* The real main part */
@@ -17,5 +17,7 @@ import {routes} from 'component/App.jsx';
 es6Promise.polyfill();
 /* Setup page title */
 window.document.title = docTitle;
+
+console.log('routes:', routes);
 
 render(<Router routes={routes} />, document.getElementById('app'));

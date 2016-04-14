@@ -17,6 +17,11 @@ app.get('/static/config.js', function(req, res) {
   res.sendFile(path.join(__dirname, 'static/config.js'));
 });
 
+app.post('/upload', function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.json({a: 'A'});
+});
+
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
