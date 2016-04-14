@@ -19,7 +19,7 @@ app.get('/static/config.js', function(req, res) {
 
 app.post('/upload', function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  res.json({a: 'A'});
+  res.json({url: 'https://www.google.com'});
 });
 
 app.get('*', function(req, res) {

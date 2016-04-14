@@ -499,14 +499,6 @@ class DemoImageForm extends Component {
     });
   }
 
-  handleBeforeUpload(file) {
-    console.log('handleBeforeUpload:', file);
-  }
-
-  handleUpload(e) {
-    console.log('handleUpload:', e);
-  }
-
   normalFile(e) {
     if (Array.isArray(e)) {
       return e;
@@ -522,9 +514,29 @@ class DemoImageForm extends Component {
       wrapperCol: { span: 12 },
     };
 
-    const imageProps = {
+    let imageProps = getFieldProps('image1', {
+      valuePropName: 'fileList',
+      normalize: (e) => {
+        console.log('normalize.e:', e);
+        if (Array.isArray(e)) { return e; }
+        return e && e.fileList;
+      }
+    });
+    Object.assign(imageProps, {
       action: '/upload',
-      listType: 'picture-card',
+      accept: "image/*",
+      listType: "picture",
+      multiple: true,
+      beforeUpload(file) {
+        console.log('handleBeforeUpload:', file);
+      },
+      onChange(info) {
+        if (info.file.status === 'done') {
+          console.log('handleChange:', info.file);
+          console.log('Upload response:', info.file.response);
+          info.file.url = info.file.response.url;
+        }
+      },
       defaultFileList: [{
         uid: -1,
         name: 'xxx.png',
@@ -532,7 +544,32 @@ class DemoImageForm extends Component {
         url: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
         thumbUrl: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
       }]
-    };
+    });
+
+    let imageProps2 = getFieldProps('image2', {
+      valuePropName: 'fileList',
+      normalize: (e) => {
+        console.log('normalize.e:', e);
+        if (Array.isArray(e)) { return e; }
+        return e && e.fileList;
+      }
+    });
+    Object.assign(imageProps2, {
+      action: '/upload',
+      accept: "image/*",
+      listType: "picture",
+      multiple: true,
+      beforeUpload(file) {
+        console.log('handleBeforeUpload:', file);
+      },
+      defaultFileList: [{
+        uid: -1,
+        name: 'xxx.png',
+        status: 'done',
+        url: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
+        thumbUrl: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
+      }]
+    });
 
     return (
       <Form horizontal form={this.props.form}>
@@ -540,14 +577,19 @@ class DemoImageForm extends Component {
         <FormItem
             {...formItemLayout}
             label="logo图："
-            help="提示信息要长长长长长长长长长长长长长长">
-          <Upload name="logo" action="/upload" multiple accept="image/*" listType="picture"
-                  beforeUpload={file => this.handleBeforeUpload(file) }
-                  onChange={e => this.handleUpload(e)}
-                  {...getFieldProps('upload', {
-                     valuePropName: 'fileList',
-                     normalize: e => this.normalFile(e)
-                   })} >
+            help="提示信息">
+          <Upload {...imageProps}>
+            <Button type="ghost">
+              <Icon type="upload" /> 点击上传
+            </Button>
+          </Upload>
+        </FormItem>
+
+        <FormItem
+            {...formItemLayout}
+            label="logo图："
+            help="提示信息">
+          <Upload {...imageProps2}>
             <Button type="ghost">
               <Icon type="upload" /> 点击上传
             </Button>
@@ -566,7 +608,6 @@ class DemoImageForm extends Component {
 };
 
 DemoImageForm = createForm()(DemoImageForm);
-
 
 ////////// 单行多字段 //////////
 class DemoMultipleFieldForm extends Component {
