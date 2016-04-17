@@ -15,7 +15,9 @@ import {
   DemoImageForm,
   DemoMultipleFieldForm,
   DemoAdvancedForm,
-  DemoValidateOtherFormModal
+  DemoValidateOtherFormModal,
+  CreateUserFormModal,
+  UpdateUserFormModal,
 } from 'page/demo/RawForms.jsx';
 
 import {
@@ -33,27 +35,11 @@ class TestForms extends Component {
     super(props);
     this.state = {
       rawModalVisible: false,
+      rawCreateUserVisible: false,
+      rawUpdateUserVisible: false,
       factoryModalVisible: false,
       defineModalVisible: false
     };
-  }
-
-  handleModalClick(name) {
-    let partialState = {};
-    partialState[name] = true;
-    this.setState(partialState);
-  }
-
-  handleModalOk(name) {
-    let partialState = {};
-    partialState[name] = false;
-    this.setState(partialState);
-  }
-
-  handleModalCancel(name) {
-    let partialState = {};
-    partialState[name] = false;
-    this.setState(partialState);
   }
 
   render() {
@@ -108,8 +94,23 @@ class TestForms extends Component {
                 <DemoAdvancedForm />
               </Card>
               <Card title="弹出框" style={cardStyle}>
-                <Button type="primary"
-                        onClick={() => {this.handleModalClick('rawModalVisible')}}>编辑</Button>
+                <CreateUserFormModal
+                    title="添加用户"
+                    visible={this.state.rawCreateUserVisible}
+                    object={{blocked: '0', verified: '1'}}
+                    onCancel={() => this.setState({ rawCreateUserVisible: false })} />
+                <UpdateUserFormModal
+                    title="修改用户"
+                    visible={this.state.rawUpdateUserVisible}
+                    object={{id: 222, ignore_field: 'IJK',
+                             role_id: 1, login: 'xxyy', name: 'XXYY', email: 'xxyy@gmail.com', blocked: '0'}}
+                    onCancel={() => this.setState({ rawUpdateUserVisible: false })}/>
+                <Button className="list-btn" type="primary"
+                        onClick={() => this.setState({rawModalVisible: true})}>编辑</Button>
+                <Button className="list-btn" type="primary"
+                        onClick={() => this.setState({rawCreateUserVisible: true})}>创建用户(继承方式)</Button>
+                <Button className="list-btn" type="primary"
+                        onClick={() => this.setState({rawUpdateUserVisible: true})}>编辑用户(继承方式)</Button>
               </Card>
             </div>
           </TabPane>

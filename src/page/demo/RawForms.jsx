@@ -23,6 +23,8 @@ import {
   QueueAnim,
 } from 'antd';
 
+import { FormModal } from 'component/content/NewForm.jsx';
+
 const createForm = Form.create;
 
 const FormItem = Form.Item;
@@ -273,13 +275,14 @@ let DemoValidateOtherForm = React.createClass({
 DemoValidateOtherForm = createForm()(DemoValidateOtherForm);
 
 
+
 ////////// Modal //////////
 class DemoValidateOtherFormModal extends Component {
   static propTypes = {
     visible: PropTypes.bool,
     alwaysPropagate: PropTypes.bool,
-    onSubmit: PropTypes.func, /* function onSubmit(e, form) */
-    onCancel: PropTypes.func, /* function onCancel(e) */
+    onSubmit: PropTypes.func, /* function onSubmit(form) */
+    onCancel: PropTypes.func, /* function onCancel() */
   }
 
   static defaultProps = {
@@ -476,6 +479,161 @@ class DemoValidateOtherFormModal extends Component {
 
 DemoValidateOtherFormModal = createForm()(DemoValidateOtherFormModal);
 
+class CreateUserFormModal extends FormModal {
+  static defaultProps = Object.assign({}, FormModal.defaultProps, {
+    type: "create",
+    fields: ['role_id', 'login', 'name', 'email',  'password', 'blocked'],
+    items: {
+      role_id: {
+        render() {
+          const { form, labelCol } = this.props;
+          const roleOptions = this.state.roles.map(function(role) {
+            return <Option key={role.id} value={String(role.id)}>{role.descr}</Option>;
+          });
+          const roleIdProps = form.getFieldProps("role_id", {
+            rules: [{required: true, message: "请选择用户角色"}]
+          });
+          return <FormItem key="role_id" label="用户角色：" labelCol={{span: labelCol}} wrapperCol={{span: 8}}>
+            <Select size="large" placeholder="请选择用户类型" style={{width:"100%"}}
+                    {...roleIdProps}>
+              {roleOptions}
+            </Select>
+          </FormItem>;
+        }
+      },
+      login: {
+        render() {
+          const { form, labelCol, wrapperCol } = this.props;
+          const formItemLayout = {
+            labelCol: { span: labelCol },
+            wrapperCol: { span: wrapperCol },
+          };
+          const loginProps = form.getFieldProps("login", {
+            rules: [{required: true, min: 4, message: "用户名至少为 4 个字符"}]
+          });
+          return <FormItem key="login" label="用户名(登录)：" {...formItemLayout}>
+            <Input placeholder="请输入用户名" {...loginProps}/>
+          </FormItem>;
+        }
+      },
+      name: {
+        render() {
+          const { form, labelCol, wrapperCol } = this.props;
+          const formItemLayout = {
+            labelCol: { span: labelCol },
+            wrapperCol: { span: wrapperCol },
+          };
+          const nameProps = form.getFieldProps("name", {
+            rules: [{required: true, min: 2, message: "长度至少为2"}]
+          });
+          return <FormItem key="name" label="姓名：" {...formItemLayout}>
+            <Input placeholder="请输入用户姓名" {...nameProps}/>
+          </FormItem>;
+        }
+      },
+      email: {
+        render() {
+          const { form, labelCol, wrapperCol } = this.props;
+          const formItemLayout = {
+            labelCol: { span: labelCol },
+            wrapperCol: { span: wrapperCol },
+          };
+          const emailProps = form.getFieldProps("email", {
+            rules: [{required: false, type: "string", message: "请输入正确的邮箱"}]
+          });
+          return <FormItem key="email" label="邮箱：" {...formItemLayout}>
+            <Input placeholder="请输入邮箱" {...emailProps}/>
+          </FormItem>;
+        }
+      },
+      password: {
+        render() {
+          const { form, labelCol, wrapperCol } = this.props;
+          const formItemLayout = {
+            labelCol: { span: labelCol },
+            wrapperCol: { span: wrapperCol },
+          };
+          const passwordProps = form.getFieldProps("password", {
+            rules: [{required: true, Whitespace: true, message: "请填写密码"}]
+          });
+          return <FormItem key="password" label="登录密码：" {...formItemLayout}>
+            <Input type="password" placeholder="请输入登录密码"
+                   {...passwordProps}/>
+          </FormItem>;
+        }
+      },
+      blocked: {
+        render() {
+          const { form, labelCol, wrapperCol } = this.props;
+          const formItemLayout = {
+            labelCol: { span: labelCol },
+            wrapperCol: { span: wrapperCol },
+          };
+          const blockedProps = form.getFieldProps("blocked", {
+            rules: [{required: true, message: "请选择是否禁用用户"}]
+          });
+          const blockedOptions = [["0", "否"], ["1", "是"]].map(function(item) {
+            return <Option key={item[0]} value={String(item[0])}>{item[1]}</Option>;
+          });
+          return <FormItem key="blocked" label="是否被禁用：" labelCol={{span: labelCol}} wrapperCol={{span: 6}}>
+            <Select size="large" placeholder="请选择是否禁用用户" style={{width:"100%"}}
+                    {...blockedProps}>
+              {blockedOptions}
+            </Select>
+          </FormItem>;
+        }
+      }
+    }
+  })
+
+  constructor(props) {
+    super(props);
+    Object.assign(this.state, {roles: []});
+  }
+
+  componentDidMount() {
+    this.setFieldDefaults();
+    this.setState({roles: [
+      { id: 1, descr: '管理员' },
+      { id: 2, descr: '版主' }]});
+  }
+
+  onSubmit(values, form) {
+    this.resetForm();
+    this.props.onSuccess();
+    message.success(`添加成功! ${JSON.stringify(values)}`, 3);
+  }
+}
+
+class UpdateUserFormModal extends CreateUserFormModal {
+  static defaultProps = Object.assign({}, CreateUserFormModal.defaultProps, {
+    type: 'update',
+    items: Object.assign({}, CreateUserFormModal.defaultProps.items, {
+      password: {
+        render() {
+          const { form, labelCol, wrapperCol } = this.props;
+          const formItemLayout = {
+            labelCol: { span: labelCol },
+            wrapperCol: { span: wrapperCol },
+          };
+          const passwordProps = form.getFieldProps("password");
+          return <FormItem key="password" label="登录密码：" {...formItemLayout}>
+            <Input type="password" placeholder="请输入登录密码"
+                   {...passwordProps}/>
+          </FormItem>;
+        }
+      }
+    })
+  })
+
+  onSubmit(values, form, callback) {
+    message.success(`修改成功: ${JSON.stringify(values)}`, 3);
+    callback(values);
+  }
+}
+
+CreateUserFormModal = Form.create()(CreateUserFormModal);
+UpdateUserFormModal = Form.create()(UpdateUserFormModal);
 
 ////////// 含图片(文件) //////////
 
@@ -802,5 +960,7 @@ export {
   DemoImageForm,
   DemoMultipleFieldForm,
   DemoAdvancedForm,
-  DemoValidateOtherFormModal
+  DemoValidateOtherFormModal,
+  CreateUserFormModal,
+  UpdateUserFormModal,
 }
