@@ -23,7 +23,7 @@ import {
   QueueAnim,
 } from 'antd';
 
-import { FormModal } from 'component/content/NewForm.jsx';
+import { FormModal } from 'component/content/Form.jsx';
 
 const createForm = Form.create;
 
