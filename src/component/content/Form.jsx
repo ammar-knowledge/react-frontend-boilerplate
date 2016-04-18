@@ -104,7 +104,9 @@ export class BaseForm extends Component {
   getFormItems() {
     const { fields, items } = this.props;
     return fields.map((field) => {
-      return items[field].render.call(this);
+      const item = items[field];
+      const render = _.isFunction(item) ? item : item.render;
+      return render.call(this);
     });
   }
 
