@@ -599,7 +599,7 @@ class CreateUserFormModal extends FormModal {
   }
 
   onSubmit(values, form) {
-    this.resetForm();
+    this.handleReset();
     this.props.onSuccess();
     message.success(`添加成功! ${JSON.stringify(values)}`, 3);
   }
