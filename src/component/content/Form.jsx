@@ -21,6 +21,8 @@ import {
 
 import * as _ from 'lodash';
 
+const FormItem = Form.Item;
+
 export class BaseForm extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
@@ -112,31 +114,32 @@ export class BaseForm extends Component {
 
   render() {
     const {form, formProps, labelCol, wrapperCol} = this.props;
-    const footerItem = <FormItem wrapperCol={{ span: wrapperCol, offset: labelCol }}>
+    const footerItem = <FormItem key="_footer" wrapperCol={{ span: wrapperCol, offset: labelCol }}>
       <Button className="list-btn" type="primary" onClick={this.handleSubmit.bind(this)}>提交</Button>
       <Button className="list-btn" type="ghost" onClick={this.handleReset.bind(this)}>重置</Button>
     </FormItem>;
     let formItems = this.getFormItems();
     formItems.push(footerItem);
-    return (
-      <Form form={form} onSubmit={e => this.handleSubmit(e)}
-            {...formProps} >
-        {formItems}
-      </Form>
-    );
+
+    return <Form form={form} onSubmit={e => this.handleSubmit(e)}
+                 {...formProps} >
+      {formItems}
+    </Form>;
   }
 }
 
 export class FormModal extends BaseForm {
-  static propTypes = Object.assign({}, BaseForm.propTypes, {
+  static propTypes = {
+    ...BaseForm.propTypes,
     visible: PropTypes.bool.isRequired,
     title: PropTypes.string,
     onCancel: PropTypes.func, /* function onCancel() */
-  })
+  }
 
-  static defaultProps = Object.assign({}, BaseForm.defaultProps, {
+  static defaultProps = {
+    ...BaseForm.defaultProps,
     title: "表单"
-  })
+  }
 
   render() {
     const {form, formProps} = this.props;
@@ -145,16 +148,14 @@ export class FormModal extends BaseForm {
       <Button type="ghost" onClick={e => this.handleReset()}>重置</Button>
       <Button type="primary" onClick={e => this.handleSubmit(e)}>提交</Button>
     </div>;
-    return (
-      <Modal title={this.props.title}
-             visible={this.props.visible}
-             footer={footer}
-             onCancel={e => this.props.onCancel()}>
-        <Form form={form} onSubmit={e => this.handleSubmit(e)}
-              {...formProps} >
-          {formItems}
-        </Form>
-      </Modal>
-    );
+    return <Modal title={this.props.title}
+                  visible={this.props.visible}
+                  footer={footer}
+                  onCancel={e => this.props.onCancel()}>
+      <Form form={form} onSubmit={e => this.handleSubmit(e)}
+            {...formProps} >
+        {formItems}
+      </Form>
+    </Modal>;
   }
 }

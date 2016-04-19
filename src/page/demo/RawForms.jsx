@@ -480,7 +480,8 @@ class DemoValidateOtherFormModal extends Component {
 DemoValidateOtherFormModal = createForm()(DemoValidateOtherFormModal);
 
 class CreateUserFormModal extends FormModal {
-  static defaultProps = Object.assign({}, FormModal.defaultProps, {
+  static defaultProps = {
+    ...FormModal.defaultProps,
     type: "create",
     fields: ['role_id', 'login', 'name',
              'email',  'password', 'blocked'],
@@ -573,7 +574,7 @@ class CreateUserFormModal extends FormModal {
         </FormItem>;
       }
     }
-  })
+  }
 
   constructor(props) {
     super(props);
@@ -595,9 +596,11 @@ class CreateUserFormModal extends FormModal {
 }
 
 class UpdateUserFormModal extends CreateUserFormModal {
-  static defaultProps = Object.assign({}, CreateUserFormModal.defaultProps, {
+  static defaultProps = {
+    ...CreateUserFormModal.defaultProps,
     type: 'update',
-    items: Object.assign({}, CreateUserFormModal.defaultProps.items, {
+    items: {
+      ...CreateUserFormModal.defaultProps.items,
       password: {
         render() {
           const { form, labelCol, wrapperCol } = this.props;
@@ -607,13 +610,13 @@ class UpdateUserFormModal extends CreateUserFormModal {
           };
           const passwordProps = form.getFieldProps("password");
           return <FormItem key="password" label="登录密码：" {...formItemLayout}>
-            <Input type="password" placeholder="请输入登录密码"
-                   {...passwordProps}/>
+          <Input type="password" placeholder="请输入登录密码"
+                 {...passwordProps}/>
           </FormItem>;
         }
       }
-    })
-  })
+    }
+  }
 
   onSubmit(values, form, callback) {
     message.success(`修改成功: ${JSON.stringify(values)}`, 3);
