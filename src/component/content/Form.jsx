@@ -82,6 +82,7 @@ export class BaseForm extends Component {
     this.props.form.resetFields();
     this.setFieldDefaults();
   }
+  resetForm() { this.handleReset() }
 
   handleSubmit(e) {
     e.preventDefault();
