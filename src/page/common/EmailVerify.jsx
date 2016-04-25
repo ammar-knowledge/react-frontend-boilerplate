@@ -4,7 +4,6 @@ import { message } from 'antd';
 import { Link, History } from 'react-router';
 
 import { Api, httpGet, httpErrorCallback } from 'data/api';
-import { BaseForm } from 'component/content/Form.jsx';
 
 const emailExists = function(rule, value, callback) {
   if (!value) {

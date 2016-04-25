@@ -486,90 +486,68 @@ class CreateUserFormModal extends FormModal {
     fields: ['role_id', 'login', 'name',
              'email',  'password', 'blocked'],
     items: {
-      role_id() {
-        const { form, labelCol } = this.props;
-        const roleOptions = this.state.roles.map(function(role) {
+      role_id({ form, field, itemProps }) {
+        itemProps.wrapperCol.span = 8;
+        const options = this.state.roles.map(function(role) {
           return <Option key={role.id} value={String(role.id)}>{role.descr}</Option>;
         });
-        const roleIdProps = form.getFieldProps("role_id", {
+        const inputProps = form.getFieldProps(field, {
           rules: [{required: true, message: "请选择用户角色"}]
         });
-        return <FormItem key="role_id" label="用户角色：" labelCol={{span: labelCol}} wrapperCol={{span: 8}}>
-        <Select size="large" placeholder="请选择用户类型" style={{width:"100%"}}
-                {...roleIdProps}>
-          {roleOptions}
-        </Select>
-        </FormItem>;
+        return (
+          <FormItem label="用户角色：" {...itemProps}>
+            <Select size="large" placeholder="请选择用户类型" style={{width:"100%"}}
+                    {...inputProps}>
+              {options}
+            </Select>
+          </FormItem>
+        );
       },
-      login() {
-        const { form, labelCol, wrapperCol } = this.props;
-        const formItemLayout = {
-          labelCol: { span: labelCol },
-          wrapperCol: { span: wrapperCol },
-        };
-        const loginProps = form.getFieldProps("login", {
+      login({ form, field, itemProps }) {
+        const inputProps = form.getFieldProps(field, {
           rules: [{required: true, min: 4, message: "用户名至少为 4 个字符"}]
         });
-        return <FormItem key="login" label="用户名(登录)：" {...formItemLayout}>
-          <Input placeholder="请输入用户名" {...loginProps}/>
+        return <FormItem label="用户名(登录)：" {...itemProps}>
+          <Input placeholder="请输入用户名" {...inputProps}/>
         </FormItem>;
       },
-      name() {
-        const { form, labelCol, wrapperCol } = this.props;
-        const formItemLayout = {
-          labelCol: { span: labelCol },
-          wrapperCol: { span: wrapperCol },
-        };
-        const nameProps = form.getFieldProps("name", {
+      name({ form, field, itemProps }) {
+        const inputProps = form.getFieldProps(field, {
           rules: [{required: true, min: 2, message: "长度至少为2"}]
         });
-        return <FormItem key="name" label="姓名：" {...formItemLayout}>
-          <Input placeholder="请输入用户姓名" {...nameProps}/>
+        return <FormItem label="姓名：" {...itemProps}>
+          <Input placeholder="请输入用户姓名" {...inputProps}/>
         </FormItem>;
       },
-      email() {
-        const { form, labelCol, wrapperCol } = this.props;
-        const formItemLayout = {
-          labelCol: { span: labelCol },
-          wrapperCol: { span: wrapperCol },
-        };
-        const emailProps = form.getFieldProps("email", {
+      email({ form, field, itemProps }) {
+        const inputProps = form.getFieldProps(field, {
           rules: [{required: false, type: "string", message: "请输入正确的邮箱"}]
         });
-        return <FormItem key="email" label="邮箱：" {...formItemLayout}>
-          <Input placeholder="请输入邮箱" {...emailProps}/>
+        return <FormItem label="邮箱：" {...itemProps}>
+          <Input placeholder="请输入邮箱" {...inputProps}/>
         </FormItem>;
       },
-      password() {
-        const { form, labelCol, wrapperCol } = this.props;
-        const formItemLayout = {
-          labelCol: { span: labelCol },
-          wrapperCol: { span: wrapperCol },
-        };
-        const passwordProps = form.getFieldProps("password", {
+      password({ form, field, itemProps }) {
+        const inputProps = form.getFieldProps(field, {
           rules: [{required: true, Whitespace: true, message: "请填写密码"}]
         });
-        return <FormItem key="password" label="登录密码：" {...formItemLayout}>
+        return <FormItem label="登录密码：" {...itemProps}>
           <Input type="password" placeholder="请输入登录密码"
-                 {...passwordProps}/>
+                 {...inputProps}/>
         </FormItem>;
       },
-      blocked() {
-        const { form, labelCol, wrapperCol } = this.props;
-        const formItemLayout = {
-          labelCol: { span: labelCol },
-          wrapperCol: { span: wrapperCol },
-        };
-        const blockedProps = form.getFieldProps("blocked", {
+      blocked({ form, field, itemProps }) {
+        itemProps.wrapperCol.span = 6;
+        const inputProps = form.getFieldProps(field, {
           rules: [{required: true, message: "请选择是否禁用用户"}]
         });
-        const blockedOptions = [["0", "否"], ["1", "是"]].map(function(item) {
+        const options = [["0", "否"], ["1", "是"]].map(function(item) {
           return <Option key={item[0]} value={String(item[0])}>{item[1]}</Option>;
         });
-        return <FormItem key="blocked" label="是否被禁用：" labelCol={{span: labelCol}} wrapperCol={{span: 6}}>
+        return <FormItem label="是否被禁用：" {...itemProps}>
           <Select size="large" placeholder="请选择是否禁用用户" style={{width:"100%"}}
-                  {...blockedProps}>
-            {blockedOptions}
+                  {...inputProps}>
+            {options}
           </Select>
         </FormItem>;
       }
@@ -582,15 +560,15 @@ class CreateUserFormModal extends FormModal {
   }
 
   componentDidMount() {
-    this.setFieldDefaults();
     this.setState({roles: [
       { id: 1, descr: '管理员' },
-      { id: 2, descr: '版主' }]});
+      { id: 2, descr: '版主' }]}, () => {
+        this.resetForm();
+      });
   }
 
-  onSubmit(values, form) {
-    this.handleReset();
-    this.props.onSuccess();
+  onSubmit(values, callback) {
+    callback();
     message.success(`添加成功! ${JSON.stringify(values)}`, 3);
   }
 }
@@ -602,14 +580,9 @@ class UpdateUserFormModal extends CreateUserFormModal {
     items: {
       ...CreateUserFormModal.defaultProps.items,
       password: {
-        render() {
-          const { form, labelCol, wrapperCol } = this.props;
-          const formItemLayout = {
-            labelCol: { span: labelCol },
-            wrapperCol: { span: wrapperCol },
-          };
-          const passwordProps = form.getFieldProps("password");
-          return <FormItem key="password" label="登录密码：" {...formItemLayout}>
+        render({ form, field, itemProps }) {
+          const passwordProps = form.getFieldProps(field);
+          return <FormItem label="登录密码：" {...itemProps}>
           <Input type="password" placeholder="请输入登录密码"
                  {...passwordProps}/>
           </FormItem>;
@@ -618,7 +591,7 @@ class UpdateUserFormModal extends CreateUserFormModal {
     }
   }
 
-  onSubmit(values, form, callback) {
+  onSubmit(values, callback) {
     message.success(`修改成功: ${JSON.stringify(values)}`, 3);
     callback(values);
   }
@@ -869,20 +842,8 @@ class DemoAdvancedForm extends Component {
   render() {
     return (
       <Form horizontal className="ant-advanced-search-form">
-        <Row gutter={16}>
+        <Row>
           <Col sm={8}>
-            <FormItem
-                label="搜索名称："
-                labelCol={{ span: 10 }}
-                wrapperCol={{ span: 14 }}>
-              <Input placeholder="请输入搜索名称" />
-            </FormItem>
-            <FormItem
-                label="较长搜索名称："
-                labelCol={{ span: 10 }}
-                wrapperCol={{ span: 14 }}>
-              <DatePicker size="default" />
-            </FormItem>
             <FormItem
                 label="搜索名称："
                 labelCol={{ span: 10 }}
@@ -897,12 +858,44 @@ class DemoAdvancedForm extends Component {
                 wrapperCol={{ span: 14 }}>
               <Input placeholder="请输入搜索名称" />
             </FormItem>
+          </Col>
+          <Col sm={8}>
+            <FormItem
+                label="搜索名称："
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}>
+              <Input placeholder="请输入搜索名称" />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={8}>
             <FormItem
                 label="较长搜索名称："
                 labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}>
               <DatePicker size="default" />
             </FormItem>
+          </Col>
+          <Col sm={8}>
+            <FormItem
+                label="较长搜索名称："
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}>
+              <DatePicker size="default" />
+            </FormItem>
+          </Col>
+          <Col sm={8}>
+            <FormItem
+                label="较长搜索名称："
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}>
+              <DatePicker size="default" />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={8}>
             <FormItem
                 label="搜索名称："
                 labelCol={{ span: 10 }}
@@ -917,12 +910,8 @@ class DemoAdvancedForm extends Component {
                 wrapperCol={{ span: 14 }}>
               <Input placeholder="请输入搜索名称" />
             </FormItem>
-            <FormItem
-                label="较长搜索名称："
-                labelCol={{ span: 10 }}
-                wrapperCol={{ span: 14 }}>
-              <DatePicker size="default" />
-            </FormItem>
+          </Col>
+          <Col sm={8}>
             <FormItem
                 label="搜索名称："
                 labelCol={{ span: 10 }}
